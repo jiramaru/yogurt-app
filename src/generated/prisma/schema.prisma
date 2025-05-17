@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Yogurt {
+  id          String      @id @default(uuid())
+  name        String      @unique
+  price       Float
+  description String
+  imageUrl    String
+  stock       Int
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  orders      OrderItem[] // Relation to OrderItem
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  userId    String? // Optional, for guest or logged-in users
+  total     Float
+  status    String      @default("pending") // e.g., pending, completed, cancelled
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  items     OrderItem[] // Relation to OrderItem
+}
+
+model OrderItem {
+  id       String @id @default(uuid())
+  orderId  String
+  yogurtId String
+  quantity Int
+  price    Float // Price at time of order
+  order    Order  @relation(fields: [orderId], references: [id])
+  yogurt   Yogurt @relation(fields: [yogurtId], references: [id])
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  phone     String   @unique
+  role      String   @default("admin") // e.g., admin, customer
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
