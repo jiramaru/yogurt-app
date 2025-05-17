@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,6 +13,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { totalItems, totalPrice } = useCart();
+  const pathname = usePathname();
   
   // Add scroll effect
   useEffect(() => {
@@ -43,20 +45,23 @@ export default function Header() {
   );
 
   return (
-    <header className="w-full px-4 md:px-8 py-4 shadow-sm bg-background border-b flex items-center justify-between relative z-50">
-      <Link href="/" className="text-2xl font-bold tracking-tight">
-        Yogurt Org
+    <header className="w-full px-4 md:px-8 py-4 shadow-sm bg-background border-b flex items-center justify-between z-50 md:relative fixed top-0 left-0">
+      <Link href="/" className="text-2xl font-bold tracking-tight text-primary">
+        <span className="flex items-center">
+          <span className="mr-1">🍦</span>
+          <span>Délices d'Isy</span>
+        </span>
       </Link>
 
       {/* Desktop Navigation */}
       <nav className="hidden md:flex gap-6 items-center">
-        <Link href="#products" className="text-sm font-medium hover:text-primary">
-          Products
+        <Link href="/" className={`text-sm font-medium hover:text-primary transition-colors ${pathname === '/' ? 'text-primary font-bold' : ''}`}>
+          Produits
         </Link>
-        <Link href="#about" className="text-sm font-medium hover:text-primary">
-          About
+        <Link href="/about" className={`text-sm font-medium hover:text-primary transition-colors ${pathname === '/about' ? 'text-primary font-bold' : ''}`}>
+          À Propos
         </Link>
-        <Link href="#contact" className="text-sm font-medium hover:text-primary">
+        <Link href="/contact" className={`text-sm font-medium hover:text-primary transition-colors ${pathname === '/contact' ? 'text-primary font-bold' : ''}`}>
           Contact
         </Link>
         <ThemeToggle />
@@ -90,13 +95,13 @@ export default function Header() {
             transition={{ duration: 0.2 }}
             className="absolute top-full left-0 w-full bg-background border-b shadow-md flex flex-col items-start px-6 py-4 space-y-4 md:hidden"
           >
-            <Link href="#products" className="text-sm font-medium hover:text-primary" onClick={() => setIsOpen(false)}>
-              Products
+            <Link href="/" className={`text-sm font-medium hover:text-primary transition-colors ${pathname === '/' ? 'text-primary font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+              Produits
             </Link>
-            <Link href="#about" className="text-sm font-medium hover:text-primary" onClick={() => setIsOpen(false)}>
-              About
+            <Link href="/about" className={`text-sm font-medium hover:text-primary transition-colors ${pathname === '/about' ? 'text-primary font-bold' : ''}`} onClick={() => setIsOpen(false)}>
+              À Propos
             </Link>
-            <Link href="#contact" className="text-sm font-medium hover:text-primary" onClick={() => setIsOpen(false)}>
+            <Link href="/contact" className={`text-sm font-medium hover:text-primary transition-colors ${pathname === '/contact' ? 'text-primary font-bold' : ''}`} onClick={() => setIsOpen(false)}>
               Contact
             </Link>
             <div className="flex items-center justify-between w-full">

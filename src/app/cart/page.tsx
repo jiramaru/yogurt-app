@@ -17,7 +17,7 @@ export default function CartPage() {
     
     // Simulate checkout process
     setTimeout(() => {
-      toast.success("Order placed successfully!");
+      toast.success("Commande passée avec succès !");
       clearCart();
       setIsCheckingOut(false);
     }, 2000);
@@ -32,7 +32,9 @@ export default function CartPage() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-bold">Your Cart</h1>
+          <h1 className="text-2xl font-bold mb-8 text-center">
+            Votre Panier
+          </h1>
         </div>
         
         <motion.div 
@@ -41,10 +43,10 @@ export default function CartPage() {
           className="flex flex-col items-center justify-center py-12 text-center"
         >
           <ShoppingBag className="h-16 w-16 text-muted-foreground mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Your cart is empty</h2>
-          <p className="text-muted-foreground mb-6">Looks like you haven't added any yogurts to your cart yet.</p>
+          <h2 className="text-xl font-semibold mb-2">Votre panier est vide</h2>
+          <p className="text-muted-foreground mb-6">Il semble que vous n'ayez pas encore ajouté de yogurts à votre panier.</p>
           <Button asChild>
-            <Link href="/">Continue Shopping</Link>
+            <Link href="/">Continuer mes achats</Link>
           </Button>
         </motion.div>
       </div>
@@ -59,9 +61,9 @@ export default function CartPage() {
             <ArrowLeft className="h-5 w-5" />
           </Button>
         </Link>
-        <h1 className="text-2xl font-bold">Your Cart</h1>
+        <h1 className="text-2xl font-bold">Votre Panier</h1>
         <span className="ml-2 bg-primary text-primary-foreground text-xs font-medium px-2.5 py-0.5 rounded-full">
-          {totalItems} {totalItems === 1 ? 'item' : 'items'}
+          {totalItems} {totalItems === 1 ? 'article' : 'articles'}
         </span>
       </div>
 
@@ -119,7 +121,7 @@ export default function CartPage() {
                 className="text-destructive hover:text-destructive/90 hover:bg-destructive/10"
                 onClick={() => {
                   removeItem(item.id);
-                  toast.success(`${item.name} removed from cart`);
+                  toast.success(`${item.name} retiré du panier`);
                 }}
               >
                 <Trash2 className="h-4 w-4" />
@@ -135,19 +137,19 @@ export default function CartPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <h3 className="text-xl font-bold mb-4">Order Summary</h3>
+        <h3 className="text-xl font-bold mb-4">Résumé de la commande</h3>
         
         <div className="space-y-2 mb-4">
           <div className="flex justify-between items-center">
-            <span className="text-muted-foreground">Subtotal ({totalItems} items)</span>
+            <span className="text-muted-foreground">Sous-total ({totalItems} {totalItems === 1 ? 'article' : 'articles'})</span>
             <span>${totalPrice.toFixed(2)}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-muted-foreground">Shipping</span>
-            <span>Free</span>
+            <span className="text-muted-foreground">Livraison</span>
+            <span>Gratuite</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-muted-foreground">Tax</span>
+            <span className="text-muted-foreground">TVA</span>
             <span>${(totalPrice * 0.1).toFixed(2)}</span>
           </div>
         </div>
@@ -170,15 +172,15 @@ export default function CartPage() {
           {isCheckingOut ? (
             <>
               <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></span>
-              Processing...
+              Traitement en cours...
             </>
           ) : (
-            'Complete Checkout'
+            'Finaliser la commande'
           )}
         </Button>
         
         <p className="text-xs text-muted-foreground text-center mt-4">
-          By completing your purchase, you agree to our Terms of Service and Privacy Policy.
+          En finalisant votre achat, vous acceptez nos Conditions Générales de Vente et notre Politique de Confidentialité.
         </p>
       </motion.div>
     </div>

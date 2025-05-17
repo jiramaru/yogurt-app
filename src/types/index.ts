@@ -8,7 +8,7 @@ export interface Yogurt {
     quantity: number;
     createdAt: Date;
     updatedAt: Date;
-    orders: any[];
+    orders: OrderItem[];
   }
   
   export interface Order {
