@@ -1,12 +1,14 @@
 export interface Yogurt {
-    id: string; // Changed from number
+    id: string;
     name: string;
     price: number;
     description: string;
     imageUrl: string;
     stock: number;
-    createdAt: string;
-    updatedAt: string;
+    quantity: number;
+    createdAt: Date;
+    updatedAt: Date;
+    orders: any[];
   }
   
   export interface Order {
@@ -29,7 +31,7 @@ export interface Yogurt {
   export interface User {
     id: string;
     email: string;
-    phone: string
+    phone: string;
     role: string;
     createdAt: string;
     updatedAt: string;

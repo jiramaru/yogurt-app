@@ -7,14 +7,16 @@ import CardList from "@/components/CardList";
 
 export default function Home() {
   return (
-    <>
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Header />
-      <h1 className="text-3xl font-bold m-8 text-center">
-        Découvrez les délices de Isy 🤗🤤
-      </h1>
-      <div className="px-4 md:px-12 lg:px-20 py-10">
-        <CardList />
-      </div>
-    </>
+      <main className="flex-grow">
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-2xl md:text-3xl font-bold mb-8 text-center">
+            Découvrez les délices de Isy 🤗🤤
+          </h1>
+          <CardList />
+        </div>
+      </main>
+    </div>
   );
 }
