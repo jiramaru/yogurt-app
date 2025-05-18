@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { yogurts } from "@/data/yogurts";
+import { getYogurtById, getYogurts } from "@/actions/yogurt-actions";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -19,18 +19,35 @@ export default function ProductPage() {
   const { addItem } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [yogurt, setYogurt] = useState<Yogurt | null>(null);
+  const [relatedYogurts, setRelatedYogurts] = useState<Yogurt[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Find the yogurt with the matching ID
-    const id = params?.id as string;
-    const foundYogurt = yogurts.find(y => y.id === id);
+    const fetchYogurtData = async () => {
+      try {
+        const id = params?.id as string;
+        const yogurtResponse = await getYogurtById(id);
+        
+        if (yogurtResponse.success && yogurtResponse.data) {
+          setYogurt(yogurtResponse.data);
+          
+          // Fetch related yogurts
+          const allYogurtsResponse = await getYogurts();
+          if (allYogurtsResponse.success && allYogurtsResponse.data) {
+            const related = allYogurtsResponse.data
+              .filter((y: Yogurt) => y.id !== id)
+              .slice(0, 4);
+            setRelatedYogurts(related);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching yogurt:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    if (foundYogurt) {
-      setYogurt(foundYogurt);
-    }
-    
-    setLoading(false);
+    fetchYogurtData();
   }, [params?.id]);
 
   const handleAddToCart = () => {
@@ -204,31 +221,28 @@ export default function ProductPage() {
         <section className="mt-20">
           <h2 className="text-2xl font-bold mb-8">Vous pourriez aussi aimer</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {yogurts
-              .filter(y => y.id !== yogurt.id)
-              .slice(0, 4)
-              .map((relatedYogurt) => (
-                <Link 
-                  href={`/product/${relatedYogurt.id}`} 
-                  key={relatedYogurt.id}
-                  className="group"
-                >
-                  <div className="bg-card rounded-lg overflow-hidden shadow-md transition-transform group-hover:shadow-lg group-hover:-translate-y-1">
-                    <div className="aspect-square relative">
-                      <Image
-                        src={relatedYogurt.imageUrl}
-                        alt={relatedYogurt.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-semibold group-hover:text-primary transition-colors">{relatedYogurt.name}</h3>
-                      <p className="text-primary font-medium mt-1">${relatedYogurt.price.toFixed(2)}</p>
-                    </div>
+            {relatedYogurts.map((relatedYogurt: Yogurt) => (
+              <Link 
+                href={`/product/${relatedYogurt.id}`} 
+                key={relatedYogurt.id}
+                className="group"
+              >
+                <div className="bg-card rounded-lg overflow-hidden shadow-md transition-transform group-hover:shadow-lg group-hover:-translate-y-1">
+                  <div className="aspect-square relative">
+                    <Image
+                      src={relatedYogurt.imageUrl}
+                      alt={relatedYogurt.name}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-                </Link>
-              ))}
+                  <div className="p-4">
+                    <h3 className="font-semibold group-hover:text-primary transition-colors">{relatedYogurt.name}</h3>
+                    <p className="text-primary font-medium mt-1">${relatedYogurt.price.toFixed(2)}</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
       </main>

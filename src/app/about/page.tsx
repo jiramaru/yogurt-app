@@ -74,7 +74,7 @@ export default function AboutPage() {
                   <div className="flex flex-col items-center">
                     <div className="relative w-32 h-32 rounded-full overflow-hidden mb-4">
                       <Image
-                        src="https://images.pexels.com/photos/3771089/pexels-photo-3771089.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        src="/isy.jpeg"
                         alt="Israël J."
                         fill
                         className="object-cover"
@@ -93,14 +93,14 @@ export default function AboutPage() {
                         className="object-cover"
                       />
                     </div>
-                    <h3 className="font-semibold">Deo BATA</h3>
+                    <h3 className="font-semibold"> <Link href={"/dashboard"}>Deo</Link> BATA</h3>
                     <p className="text-sm text-muted-foreground">Developpeur</p>
                   </div>
                   
                   <div className="flex flex-col items-center">
                     <div className="relative w-32 h-32 rounded-full overflow-hidden mb-4">
                       <Image
-                        src="https://images.pexels.com/photos/3771045/pexels-photo-3771045.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        src="https://images.pexels.com/photos/32108574/pexels-photo-32108574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                         alt="Sophie Laurent"
                         fill
                         className="object-cover"

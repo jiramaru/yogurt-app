@@ -26,23 +26,18 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr" suppressHydrationWarning>
-      <head />
-      <body
-        className={`${inter.variable} ${robotoMono.variable} antialiased min-h-screen bg-background font-sans`}
+    <div className={`${inter.variable} ${robotoMono.variable} antialiased min-h-screen bg-background font-sans`}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <CartProvider>
-            {children}
-            <Toaster position="bottom-right" richColors />
-          </CartProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+        <CartProvider>
+          {children}
+          <Toaster position="bottom-right" richColors />
+        </CartProvider>
+      </ThemeProvider>
+    </div>
   );
 }

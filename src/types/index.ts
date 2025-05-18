@@ -12,12 +12,24 @@ export interface Yogurt {
   }
   
   export interface Order {
-    id: string; // Changed from number
+    id: string;
     userId: string | null;
     total: number;
     status: string;
     createdAt: string;
     updatedAt: string;
+    items?: OrderItemWithYogurt[];
+  }
+  
+  export interface OrderItemWithYogurt extends OrderItem {
+    yogurt?: {
+      id: string;
+      name: string;
+      price: number;
+      imageUrl: string;
+      description: string;
+      stock: number;
+    };
   }
   
   export interface OrderItem {

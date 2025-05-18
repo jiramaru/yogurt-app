@@ -40,25 +40,8 @@ import {
   XCircle,
   Package
 } from "lucide-react";
-import { Order } from "@/types";
-import { getOrders, getOrderById, updateOrderStatus as updateStatus, getOrderItems } from "@/actions";
-
-// Type for order items in the UI
-type OrderItemWithYogurt = {
-  id: string;
-  orderId: string;
-  yogurtId: string;
-  quantity: number;
-  price: number;
-  yogurt: {
-    id: string;
-    name: string;
-    price: number;
-    imageUrl: string;
-    description: string;
-    stock: number;
-  };
-};
+import { Order, OrderItemWithYogurt } from "@/types";
+import { getOrders, getOrderById, updateOrderStatus as updateStatus } from "@/actions";
 
 export default function OrderManagement() {
   const [orders, setOrders] = useState<Order[]>([]);

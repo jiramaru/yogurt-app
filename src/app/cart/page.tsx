@@ -7,20 +7,45 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useState } from "react";
+import { createOrder } from "@/actions/order-actions";
+import { ActionResponse } from "@/actions/types";
 
 export default function CartPage() {
   const { items, updateQuantity, removeItem, clearCart, totalItems, totalPrice } = useCart();
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     setIsCheckingOut(true);
     
-    // Simulate checkout process
-    setTimeout(() => {
-      toast.success("Commande passée avec succès !");
-      clearCart();
+    try {
+      // Prepare order items data
+      const orderItems = items.map(item => ({
+        orderId: "", // This will be filled by the server action
+        yogurtId: item.id,
+        quantity: item.quantity,
+        price: item.price
+      }));
+      
+      // Create the order with items
+      const orderResponse = await createOrder({
+        userId: null, // Guest order (no user ID)
+        status: 'pending',
+        total: parseFloat((totalPrice + (totalPrice * 0.1)).toFixed(2)),
+        items: orderItems
+      });
+      
+      if (orderResponse.success) {
+        toast.success("Commande passée avec succès !");
+        clearCart();
+      } else {
+        toast.error(orderResponse.error || "Erreur lors de la création de la commande");
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("Une erreur est survenue lors du traitement de votre commande");
+    } finally {
       setIsCheckingOut(false);
-    }, 2000);
+    }
   };
 
   if (items.length === 0) {
