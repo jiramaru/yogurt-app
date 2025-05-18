@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/prisma';
 
 // Extend the globalThis type to include prisma
 declare global {
@@ -8,15 +8,8 @@ declare global {
 
 // PrismaClient is attached to the `global` object in development to prevent
 // exhausting your database connection limit.
-let prisma: PrismaClient;
+export const prisma = global.prisma || new PrismaClient();
 
-if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient();
-} else {
-  if (!global.prisma) {
-    global.prisma = new PrismaClient();
-  }
-  prisma = global.prisma;
+if (process.env.NODE_ENV !== 'production') {
+  global.prisma = prisma;
 }
-
-export { prisma };

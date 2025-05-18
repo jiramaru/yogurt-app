@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import { CartProvider } from "@/context/CartContext";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "Dashboard - Délices d'Isy",
+  description: "Tableau de bord administratif",
+};
 
 const inter = Inter({
   variable: "--font-inter",
@@ -17,17 +20,11 @@ const robotoMono = Roboto_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Délices d'Isy - Yogurt Artisanal",
-  description: "Découvrez nos yogurts artisanaux préparés avec passion pour éveiller vos papilles",
-  keywords: ["yogurt", "shop", "dessert", "healthy", "food"],
-};
-
-export default function RootLayout({
+export default function DashboardLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="fr" suppressHydrationWarning>
       <head />
@@ -41,9 +38,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <CartProvider>
-            <Header />
-            <main className="flex-grow pt-[60px] md:pt-0">{children}</main>
-            <Footer />
+            {children}
             <Toaster position="bottom-right" richColors />
           </CartProvider>
         </ThemeProvider>

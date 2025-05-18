@@ -3,53 +3,70 @@ import { z } from 'zod';
 import { yogurtSchema } from '@/lib/zodSchemas';
 import { getAuth } from '@clerk/nextjs/server';
 import type { NextRequest } from 'next/server';
-
-// Dummy data to use during build time or when database is not available
-const dummyYogurts = [
-  {
-    id: '1',
-    name: 'Strawberry Bliss',
-    price: 2.50,
-    description: 'A creamy blend of fresh strawberries and smooth yogurt.',
-    imageUrl: 'https://images.pexels.com/photos/5862148/pexels-photo-5862148.jpeg',
-    stock: 100,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '2',
-    name: 'Mango Magic',
-    price: 2.80,
-    description: 'Tropical mango delight with a tangy twist.',
-    imageUrl: 'https://images.pexels.com/photos/5150127/pexels-photo-5150127.jpeg',
-    stock: 50,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }
-];
+import { prisma } from '@/lib/prisma';
 
 // GET: Fetch all yogurts
-export async function GET() {
-  // Always return dummy data during build
-  return NextResponse.json(dummyYogurts, { status: 200 });
+export async function GET(request: NextRequest) {
+  try {
+    const url = new URL(request.url);
+    const id = url.searchParams.get('id');
+    
+    if (id) {
+      // Return a specific yogurt if ID is provided
+      const yogurt = await prisma.yogurt.findUnique({
+        where: { id }
+      });
+      
+      if (!yogurt) {
+        return NextResponse.json({ error: 'Yogurt not found' }, { status: 404 });
+      }
+      
+      return NextResponse.json(yogurt, { status: 200 });
+    }
+    
+    // Return all yogurts
+    const yogurts = await prisma.yogurt.findMany();
+    return NextResponse.json(yogurts, { status: 200 });
+  } catch (error) {
+    console.error('Error fetching yogurts:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch yogurts' },
+      { status: 500 }
+    );
+  }
 }
 
-// POST: Create a new yogurt (admin-only)
+// POST: Create a new yogurt
 export async function POST(request: NextRequest) {
   try {
     // Parse and validate request body using Zod
     const body = await request.json();
     const data = yogurtSchema.parse(body);
     
-    // Return a mock successful response
-    const mockData = {
-      ...data,
-      id: 'mock-id',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+    // Check if yogurt with the same name already exists
+    const existingYogurt = await prisma.yogurt.findUnique({
+      where: { name: data.name }
+    });
     
-    return NextResponse.json(mockData, { status: 201 });
+    if (existingYogurt) {
+      return NextResponse.json(
+        { error: 'A yogurt with this name already exists' },
+        { status: 409 }
+      );
+    }
+    
+    // Create new yogurt in the database
+    const newYogurt = await prisma.yogurt.create({
+      data: {
+        name: data.name,
+        price: data.price,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        stock: data.stock
+      }
+    });
+    
+    return NextResponse.json(newYogurt, { status: 201 });
   } catch (error) {
     // Handle validation errors
     if (error instanceof z.ZodError) {
@@ -59,9 +76,112 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    console.error('Error creating yogurt:', error);
     // Return a generic error
     return NextResponse.json(
-      { error: 'Failed to process request' },
+      { error: 'Failed to create yogurt' },
+      { status: 500 }
+    );
+  }
+}
+
+// PATCH: Update an existing yogurt
+export async function PATCH(request: NextRequest) {
+  try {
+    const url = new URL(request.url);
+    const id = url.searchParams.get('id');
+    
+    if (!id) {
+      return NextResponse.json({ error: 'Yogurt ID is required' }, { status: 400 });
+    }
+    
+    // Check if yogurt exists
+    const existingYogurt = await prisma.yogurt.findUnique({
+      where: { id }
+    });
+    
+    if (!existingYogurt) {
+      return NextResponse.json({ error: 'Yogurt not found' }, { status: 404 });
+    }
+    
+    // Parse and validate request body
+    const body = await request.json();
+    const data = yogurtSchema.parse(body);
+    
+    // Check if name is being changed and if it's already taken
+    if (data.name !== existingYogurt.name) {
+      const duplicateYogurt = await prisma.yogurt.findUnique({
+        where: { name: data.name }
+      });
+      
+      if (duplicateYogurt) {
+        return NextResponse.json(
+          { error: 'A yogurt with this name already exists' },
+          { status: 409 }
+        );
+      }
+    }
+    
+    // Update yogurt in the database
+    const updatedYogurt = await prisma.yogurt.update({
+      where: { id },
+      data: {
+        name: data.name,
+        price: data.price,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        stock: data.stock
+      }
+    });
+    
+    return NextResponse.json(updatedYogurt, { status: 200 });
+  } catch (error) {
+    // Handle validation errors
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: 'Invalid input', details: error.errors },
+        { status: 400 }
+      );
+    }
+    
+    console.error('Error updating yogurt:', error);
+    // Return a generic error
+    return NextResponse.json(
+      { error: 'Failed to update yogurt' },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE: Remove a yogurt
+export async function DELETE(request: NextRequest) {
+  try {
+    const url = new URL(request.url);
+    const id = url.searchParams.get('id');
+    
+    if (!id) {
+      return NextResponse.json({ error: 'Yogurt ID is required' }, { status: 400 });
+    }
+    
+    // Check if yogurt exists
+    const existingYogurt = await prisma.yogurt.findUnique({
+      where: { id }
+    });
+    
+    if (!existingYogurt) {
+      return NextResponse.json({ error: 'Yogurt not found' }, { status: 404 });
+    }
+    
+    // Delete yogurt from the database
+    await prisma.yogurt.delete({
+      where: { id }
+    });
+    
+    return NextResponse.json({ success: true, message: 'Yogurt deleted successfully' }, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting yogurt:', error);
+    return NextResponse.json(
+      { error: 'Failed to delete yogurt' },
       { status: 500 }
     );
   }

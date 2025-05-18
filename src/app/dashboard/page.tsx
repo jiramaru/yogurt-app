@@ -1,0 +1,267 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Yogurt } from "@/types";
+import YogurtManagement from "@/components/dashboard/YogurtManagement";
+import OrderManagement from "@/components/dashboard/OrderManagement";
+import UserManagement from "@/components/dashboard/UserManagement";
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import DashboardStatsComponent from "@/components/dashboard/DashboardStats";
+import { toast } from "sonner";
+import { 
+  getDashboardStats, 
+  getTopSellingYogurts, 
+  getRecentOrders, 
+  getLowStockYogurts, 
+  type DashboardStats as DashboardStatsType, 
+  type TopSellingYogurt, 
+  type RecentOrder, 
+  type LowStockYogurt 
+} from "@/actions";
+
+export default function DashboardPage() {
+  const [activeTab, setActiveTab] = useState("overview");
+  const [isLoading, setIsLoading] = useState(true);
+  const [stats, setStats] = useState<DashboardStatsType>({
+    totalYogurts: 0,
+    totalOrders: 0,
+    totalUsers: 0,
+    totalRevenue: 0,
+  });
+
+  // State for overview data
+  const [topYogurts, setTopYogurts] = useState<TopSellingYogurt[]>([]);
+  const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
+  const [lowStockYogurts, setLowStockYogurts] = useState<LowStockYogurt[]>([]);
+
+  // Fetch dashboard stats and overview data
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        // Fetch stats from server action
+        const statsResponse = await getDashboardStats();
+        if (statsResponse.success && statsResponse.data) {
+          setStats(statsResponse.data);
+        } else {
+          toast.error(statsResponse.error || "Failed to load dashboard statistics");
+        }
+        
+        // Fetch additional overview data
+        const [topSellingResponse, recentOrdersResponse, lowStockResponse] = await Promise.all([
+          getTopSellingYogurts(),
+          getRecentOrders(),
+          getLowStockYogurts()
+        ]);
+        
+        if (topSellingResponse.success && topSellingResponse.data) {
+          setTopYogurts(topSellingResponse.data);
+        }
+        
+        if (recentOrdersResponse.success && recentOrdersResponse.data) {
+          setRecentOrders(recentOrdersResponse.data);
+        }
+        
+        if (lowStockResponse.success && lowStockResponse.data) {
+          setLowStockYogurts(lowStockResponse.data);
+        }
+        
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+        toast.error("Failed to load dashboard data");
+        setIsLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 24,
+      },
+    },
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
+          <p className="text-lg font-medium">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background pb-8">
+      <DashboardHeader />
+      
+      <motion.div
+        className="container mx-auto px-4 py-8"
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+      >
+        <motion.div variants={itemVariants}>
+          <h1 className="mb-2 text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p className="mb-8 text-muted-foreground">
+            Manage your yogurt shop - products, orders, and users.
+          </p>
+        </motion.div>
+
+        <motion.div variants={itemVariants}>
+          <DashboardStatsComponent stats={stats} />
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="mt-8">
+          <Tabs
+            defaultValue="overview"
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
+            <TabsList className="grid w-full grid-cols-4 lg:w-auto">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="yogurts">Yogurts</TabsTrigger>
+              <TabsTrigger value="orders">Orders</TabsTrigger>
+              <TabsTrigger value="users">Users</TabsTrigger>
+            </TabsList>
+            
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTab}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+              >
+                <TabsContent value="overview" className="mt-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Shop Overview</CardTitle>
+                      <CardDescription>
+                        Get a quick overview of your yogurt shop's performance.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <Card>
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-sm font-medium">Top Selling Products</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ul className="space-y-2">
+                              {topYogurts.length > 0 ? (
+                                topYogurts.map((yogurt) => (
+                                  <li key={yogurt.id} className="flex items-center justify-between">
+                                    <span>{yogurt.name}</span>
+                                    <span className="text-sm text-muted-foreground">{yogurt.sold} sold</span>
+                                  </li>
+                                ))
+                              ) : (
+                                <li className="text-sm text-muted-foreground">No sales data available</li>
+                              )}
+                            </ul>
+                          </CardContent>
+                        </Card>
+                        
+                        <Card>
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-sm font-medium">Recent Orders</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ul className="space-y-2">
+                              {recentOrders.length > 0 ? (
+                                recentOrders.map((order) => (
+                                  <li key={order.id} className="flex items-center justify-between">
+                                    <span>Order #{order.id.substring(0, 4)}</span>
+                                    <span className={`text-sm ${order.status === 'completed' ? 'text-green-500' : 
+                                                      order.status === 'cancelled' ? 'text-red-500' : 'text-amber-500'}`}>
+                                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                    </span>
+                                  </li>
+                                ))
+                              ) : (
+                                <li className="text-sm text-muted-foreground">No recent orders</li>
+                              )}
+                            </ul>
+                          </CardContent>
+                        </Card>
+                        
+                        <Card>
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-sm font-medium">Low Stock Alert</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <ul className="space-y-2">
+                              {lowStockYogurts.length > 0 ? (
+                                lowStockYogurts.map((yogurt) => (
+                                  <li key={yogurt.id} className="flex items-center justify-between">
+                                    <span>{yogurt.name}</span>
+                                    <span className={`text-sm ${yogurt.stock < 10 ? 'text-red-500' : 'text-amber-500'}`}>
+                                      {yogurt.stock} left
+                                    </span>
+                                  </li>
+                                ))
+                              ) : (
+                                <li className="text-sm text-muted-foreground">No low stock items</li>
+                              )}
+                            </ul>
+                          </CardContent>
+                        </Card>
+                      </div>
+                      
+                      <div className="mt-6">
+                        <h3 className="mb-4 text-lg font-medium">Quick Actions</h3>
+                        <div className="flex flex-wrap gap-3">
+                          <Button onClick={() => setActiveTab("yogurts")}>Add New Yogurt</Button>
+                          <Button variant="outline" onClick={() => setActiveTab("orders")}>View All Orders</Button>
+                          <Button variant="outline" onClick={() => setActiveTab("users")}>Manage Users</Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                
+                <TabsContent value="yogurts" className="mt-6">
+                  <YogurtManagement />
+                </TabsContent>
+                
+                <TabsContent value="orders" className="mt-6">
+                  <OrderManagement />
+                </TabsContent>
+                
+                <TabsContent value="users" className="mt-6">
+                  <UserManagement />
+                </TabsContent>
+              </motion.div>
+            </AnimatePresence>
+          </Tabs>
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+}
