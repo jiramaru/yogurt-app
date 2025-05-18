@@ -238,7 +238,7 @@ export default function ProductPage() {
                   </div>
                   <div className="p-4">
                     <h3 className="font-semibold group-hover:text-primary transition-colors">{relatedYogurt.name}</h3>
-                    <p className="text-primary font-medium mt-1">${relatedYogurt.price.toFixed(2)}</p>
+                    <p className="text-primary font-medium mt-1">{relatedYogurt.price.toFixed(0)} FCFA</p>
                   </div>
                 </div>
               </Link>

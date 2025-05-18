@@ -61,13 +61,13 @@ export default function OrderManagement() {
         const result = await getOrders();
         
         if (!result.success) {
-          throw new Error(result.error || "Failed to fetch orders");
+          throw new Error(result.error || "Impossible de récupérer les commandes");
         }
         
         setOrders(result.data || []);
       } catch (error) {
-        console.error("Error fetching orders:", error);
-        toast.error("Failed to load orders");
+        console.error("Erreur lors de la récupération des commandes:", error);
+        toast.error("Impossible de charger les commandes");
       } finally {
         setIsLoading(false);
       }
@@ -103,10 +103,10 @@ export default function OrderManagement() {
         });
       }
       
-      toast.success(`Order #${orderId.substring(0, 4)} status updated to ${newStatus}`);
+      toast.success(`Commande #${orderId.substring(0, 4)} statut mis à jour: ${newStatus}`);
     } catch (error) {
-      console.error("Error updating order:", error);
-      toast.error("Failed to update order status");
+      console.error("Erreur lors de la mise à jour de la commande:", error);
+      toast.error("Échec de la mise à jour du statut de la commande");
     }
   };
 
@@ -174,25 +174,29 @@ export default function OrderManagement() {
   // Get status badge styling
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "completed":
-        return {
-          color: "bg-green-100 text-green-800 dark:bg-green-800/20 dark:text-green-400",
-          icon: CheckCircle
-        };
       case "pending":
         return {
           color: "bg-amber-100 text-amber-800 dark:bg-amber-800/20 dark:text-amber-400",
-          icon: Clock
+          icon: Clock,
+          label: "En attente"
+        };
+      case "completed":
+        return {
+          color: "bg-green-100 text-green-800 dark:bg-green-800/20 dark:text-green-400",
+          icon: CheckCircle,
+          label: "Terminée"
         };
       case "cancelled":
         return {
           color: "bg-red-100 text-red-800 dark:bg-red-800/20 dark:text-red-400",
-          icon: XCircle
+          icon: XCircle,
+          label: "Annulée"
         };
       default:
         return {
           color: "bg-gray-100 text-gray-800 dark:bg-gray-800/20 dark:text-gray-400",
-          icon: Package
+          icon: Package,
+          label: status
         };
     }
   };
@@ -276,13 +280,13 @@ export default function OrderManagement() {
                 onValueChange={setStatusFilter}
               >
                 <SelectTrigger className="w-full sm:w-[180px]">
-                  <SelectValue placeholder="Filter by status" />
+                  <SelectValue placeholder="Filtrer par statut" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Statuses</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                  <SelectItem value="all">Tous les statuts</SelectItem>
+                  <SelectItem value="pending">En attente</SelectItem>
+                  <SelectItem value="completed">Terminée</SelectItem>
+                  <SelectItem value="cancelled">Annulée</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -296,20 +300,20 @@ export default function OrderManagement() {
                   
                   if (result.success && result.data) {
                     setOrders(result.data);
-                    toast.success("Orders refreshed");
+                    toast.success("Commandes actualisées");
                   } else {
-                    throw new Error(result.error || "Failed to refresh orders");
+                    throw new Error(result.error || "Impossible d'actualiser les commandes");
                   }
                 } catch (error) {
-                  console.error("Error refreshing orders:", error);
-                  toast.error("Failed to refresh orders");
+                  console.error("Erreur lors de l'actualisation des commandes:", error);
+                  toast.error("Impossible d'actualiser les commandes");
                 } finally {
                   setIsLoading(false);
                 }
               }}
             >
               <RefreshCw className="mr-2 h-4 w-4" />
-              Refresh
+              Actualiser
             </Button>
           </div>
 
@@ -317,7 +321,7 @@ export default function OrderManagement() {
             <div className="flex h-[300px] items-center justify-center">
               <div className="flex flex-col items-center gap-2">
                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-                <p className="text-sm text-muted-foreground">Loading orders...</p>
+                <p className="text-sm text-muted-foreground">Chargement des commandes...</p>
               </div>
             </div>
           ) : sortedOrders.length === 0 ? (
@@ -325,11 +329,11 @@ export default function OrderManagement() {
               <div className="rounded-full bg-muted p-3">
                 <ShoppingCart className="h-6 w-6 text-muted-foreground" />
               </div>
-              <h3 className="text-lg font-medium">No orders found</h3>
+              <h3 className="text-lg font-medium">Aucune commande trouvée</h3>
               <p className="text-sm text-muted-foreground">
                 {searchQuery || statusFilter !== "all"
-                  ? "Try different search terms or filters"
-                  : "Orders will appear here when customers make purchases"}
+                  ? "Essayez d'autres termes de recherche ou filtres"
+                  : "Les commandes apparaîtront ici lorsque les clients effectueront des achats"}
               </p>
             </div>
           ) : (
@@ -339,11 +343,11 @@ export default function OrderManagement() {
                   <TableRow>
                     <TableHead className="w-[100px]">
                       <div className="flex items-center gap-1 cursor-pointer" onClick={() => toggleSort("id")}>
-                        Order ID
+                        ID Commande
                         <ArrowUpDown className="h-4 w-4" />
                       </div>
                     </TableHead>
-                    <TableHead>Customer</TableHead>
+                    <TableHead>Client</TableHead>
                     <TableHead>
                       <div className="flex items-center gap-1 cursor-pointer" onClick={() => toggleSort("createdAt")}>
                         Date
@@ -358,7 +362,7 @@ export default function OrderManagement() {
                     </TableHead>
                     <TableHead>
                       <div className="flex items-center gap-1 cursor-pointer" onClick={() => toggleSort("status")}>
-                        Status
+                        Statut
                         <ArrowUpDown className="h-4 w-4" />
                       </div>
                     </TableHead>
@@ -496,31 +500,31 @@ export default function OrderManagement() {
                 </div>
                 
                 <div className="mb-6">
-                  <h3 className="mb-2 text-sm font-medium text-muted-foreground">Order Items</h3>
+                  <h3 className="mb-2 text-sm font-medium text-muted-foreground">Articles de la commande</h3>
                   <div className="rounded-md border">
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Product</TableHead>
-                          <TableHead className="text-right">Quantity</TableHead>
-                          <TableHead className="text-right">Price</TableHead>
-                          <TableHead className="text-right">Subtotal</TableHead>
+                          <TableHead>Produit</TableHead>
+                          <TableHead className="text-right">Quantité</TableHead>
+                          <TableHead className="text-right">Prix</TableHead>
+                          <TableHead className="text-right">Sous-total</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
                         {selectedOrder.items && selectedOrder.items.length > 0 ? (
                           selectedOrder.items.map((item: any) => (
                             <TableRow key={item.id}>
-                              <TableCell>{item.yogurt?.name || 'Unknown Product'}</TableCell>
+                              <TableCell>{item.yogurt?.name || 'Produit inconnu'}</TableCell>
                               <TableCell className="text-right">{item.quantity}</TableCell>
-                              <TableCell className="text-right">${item.price.toFixed(2)}</TableCell>
-                              <TableCell className="text-right">${(item.price * item.quantity).toFixed(2)}</TableCell>
+                              <TableCell className="text-right">{item.price.toFixed(0)} FCFA</TableCell>
+                              <TableCell className="text-right">{(item.price * item.quantity).toFixed(0)} FCFA</TableCell>
                             </TableRow>
                           ))
                         ) : (
                           <TableRow>
                             <TableCell colSpan={4} className="text-center text-muted-foreground">
-                              No items in this order
+                              Aucun article dans cette commande
                             </TableCell>
                           </TableRow>
                         )}
@@ -531,16 +535,16 @@ export default function OrderManagement() {
                 
                 <div className="mb-6 rounded-md border p-4">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Subtotal:</span>
-                    <span>${(selectedOrder.total * 0.9).toFixed(2)}</span>
+                    <span className="text-muted-foreground">Sous-total:</span>
+                    <span>{(selectedOrder.total * 0.9).toFixed(0)} FCFA</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Tax (10%):</span>
-                    <span>${(selectedOrder.total * 0.1).toFixed(2)}</span>
+                    <span className="text-muted-foreground">TVA (10%):</span>
+                    <span>{(selectedOrder.total * 0.1).toFixed(0)} FCFA</span>
                   </div>
                   <div className="mt-2 flex justify-between border-t pt-2 font-medium">
                     <span>Total:</span>
-                    <span>${selectedOrder.total.toFixed(2)}</span>
+                    <span>{selectedOrder.total.toFixed(0)} FCFA</span>
                   </div>
                 </div>
                 
@@ -552,12 +556,12 @@ export default function OrderManagement() {
                     }}
                   >
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Update Status" />
+                      <SelectValue placeholder="Mettre à jour le statut" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="completed">Completed</SelectItem>
-                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                      <SelectItem value="pending">En attente</SelectItem>
+                      <SelectItem value="completed">Terminée</SelectItem>
+                      <SelectItem value="cancelled">Annulée</SelectItem>
                     </SelectContent>
                   </Select>
                   
@@ -565,7 +569,7 @@ export default function OrderManagement() {
                     variant="outline"
                     onClick={() => setIsDetailsModalOpen(false)}
                   >
-                    Close
+                    Fermer
                   </Button>
                 </div>
               </div>

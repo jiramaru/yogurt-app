@@ -75,8 +75,8 @@ export default function TestActionsPage() {
     setLoading(true);
     const response = await createYogurt({
       name: `Test Yogurt ${Date.now()}`,
-      price: 3.99,
-      description: 'A delicious test yogurt',
+      price: 2000,
+      description: 'Un délicieux yogurt de test',
       imageUrl: 'https://example.com/yogurt.jpg',
       stock: 100
     });
@@ -133,13 +133,13 @@ export default function TestActionsPage() {
       const quantity = 2;
       const response = await createOrder({
         userId: null, // Guest order
-        total: yogurt.price * quantity,
+        total: parseInt((yogurt.price * quantity).toFixed(0)),
         status: 'pending',
         items: [
           {
             yogurtId: yogurt.id,
             quantity,
-            price: yogurt.price,
+            price: parseInt(yogurt.price.toFixed(0)),
             orderId: '' // This will be filled by the server action
           }
         ]
@@ -292,97 +292,97 @@ export default function TestActionsPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Test Server Actions</h1>
+      <h1 className="text-2xl font-bold mb-4">Test des Actions Serveur</h1>
       
-      {loading && <div className="mb-4 p-2 bg-blue-100 rounded">Loading...</div>}
+      {loading && <div className="mb-4 p-2 bg-blue-100 rounded">Chargement...</div>}
       
       <div className="grid grid-cols-2 gap-4 mb-8">
         <div className="border p-4 rounded">
-          <h2 className="text-xl font-semibold mb-2">User Actions</h2>
+          <h2 className="text-xl font-semibold mb-2">Actions Utilisateurs</h2>
           <div className="space-y-2">
             <button onClick={testGetUsers} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">
-              Get Users
+              Obtenir Utilisateurs
             </button>
             <button onClick={testCreateUser} className="bg-green-500 text-white px-3 py-1 rounded mr-2">
-              Create User
+              Créer Utilisateur
             </button>
             <button onClick={testUpdateUser} className="bg-yellow-500 text-white px-3 py-1 rounded mr-2">
-              Update User
+              Modifier Utilisateur
             </button>
             <button onClick={testDeleteUser} className="bg-red-500 text-white px-3 py-1 rounded">
-              Delete User
+              Supprimer Utilisateur
             </button>
           </div>
         </div>
         
         <div className="border p-4 rounded">
-          <h2 className="text-xl font-semibold mb-2">Yogurt Actions</h2>
+          <h2 className="text-xl font-semibold mb-2">Actions Yogurts</h2>
           <div className="space-y-2">
             <button onClick={testGetYogurts} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">
-              Get Yogurts
+              Obtenir Yogurts
             </button>
             <button onClick={testCreateYogurt} className="bg-green-500 text-white px-3 py-1 rounded mr-2">
-              Create Yogurt
+              Créer Yogurt
             </button>
             <button onClick={testUpdateYogurt} className="bg-yellow-500 text-white px-3 py-1 rounded mr-2">
-              Update Yogurt
+              Modifier Yogurt
             </button>
             <button onClick={testDeleteYogurt} className="bg-red-500 text-white px-3 py-1 rounded">
-              Delete Yogurt
+              Supprimer Yogurt
             </button>
           </div>
         </div>
         
         <div className="border p-4 rounded">
-          <h2 className="text-xl font-semibold mb-2">Order Actions</h2>
+          <h2 className="text-xl font-semibold mb-2">Actions Commandes</h2>
           <div className="space-y-2">
             <button onClick={testGetOrders} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">
-              Get Orders
+              Obtenir Commandes
             </button>
             <button onClick={testCreateOrder} className="bg-green-500 text-white px-3 py-1 rounded mr-2">
-              Create Order
+              Créer Commande
             </button>
             <button onClick={testUpdateOrderStatus} className="bg-yellow-500 text-white px-3 py-1 rounded mr-2">
-              Update Order Status
+              Modifier Statut Commande
             </button>
             <button onClick={testDeleteOrder} className="bg-red-500 text-white px-3 py-1 rounded">
-              Delete Order
+              Supprimer Commande
             </button>
           </div>
         </div>
         
         <div className="border p-4 rounded">
-          <h2 className="text-xl font-semibold mb-2">Order Item Actions</h2>
+          <h2 className="text-xl font-semibold mb-2">Actions Articles Commande</h2>
           <div className="space-y-2">
             <button onClick={testGetOrderItems} className="bg-blue-500 text-white px-3 py-1 rounded mr-2">
-              Get Order Items
+              Obtenir Articles
             </button>
             <button onClick={testAddOrderItem} className="bg-green-500 text-white px-3 py-1 rounded mr-2">
-              Add Order Item
+              Ajouter Article
             </button>
             <button onClick={testUpdateOrderItem} className="bg-yellow-500 text-white px-3 py-1 rounded mr-2">
-              Update Order Item
+              Modifier Article
             </button>
             <button onClick={testRemoveOrderItem} className="bg-red-500 text-white px-3 py-1 rounded">
-              Remove Order Item
+              Supprimer Article
             </button>
           </div>
         </div>
         
         <div className="border p-4 rounded col-span-2">
-          <h2 className="text-xl font-semibold mb-2">Dashboard Actions</h2>
+          <h2 className="text-xl font-semibold mb-2">Actions Tableau de Bord</h2>
           <div className="space-y-2">
             <button onClick={testGetDashboardStats} className="bg-purple-500 text-white px-3 py-1 rounded mr-2">
-              Get Dashboard Stats
+              Obtenir Statistiques
             </button>
             <button onClick={testGetTopSellingYogurts} className="bg-purple-500 text-white px-3 py-1 rounded mr-2">
-              Get Top Selling Yogurts
+              Obtenir Yogurts les Plus Vendus
             </button>
             <button onClick={testGetRecentOrders} className="bg-purple-500 text-white px-3 py-1 rounded mr-2">
-              Get Recent Orders
+              Obtenir Commandes Récentes
             </button>
             <button onClick={testGetLowStockYogurts} className="bg-purple-500 text-white px-3 py-1 rounded">
-              Get Low Stock Yogurts
+              Obtenir Yogurts en Stock Bas
             </button>
           </div>
         </div>
@@ -390,7 +390,7 @@ export default function TestActionsPage() {
       
       {result && (
         <div className="border p-4 rounded">
-          <h2 className="text-xl font-semibold mb-2">Result</h2>
+          <h2 className="text-xl font-semibold mb-2">Résultat</h2>
           <pre className="bg-gray-100 p-4 rounded overflow-auto max-h-96">
             {JSON.stringify(result, null, 2)}
           </pre>

@@ -109,7 +109,7 @@ export default function DashboardPage() {
       <div className="flex h-screen items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-          <p className="text-lg font-medium">Loading dashboard...</p>
+          <p className="text-lg font-medium">Chargement du tableau de bord...</p>
         </div>
       </div>
     );
@@ -126,9 +126,9 @@ export default function DashboardPage() {
         variants={containerVariants}
       >
         <motion.div variants={itemVariants}>
-          <h1 className="mb-2 text-3xl font-bold tracking-tight">Dashboard</h1>
+          <h1 className="mb-2 text-3xl font-bold tracking-tight">Tableau de bord</h1>
           <p className="mb-8 text-muted-foreground">
-            Manage your yogurt shop - products, orders, and users.
+            Gérez votre boutique de yogurts - produits, commandes et utilisateurs.
           </p>
         </motion.div>
 
@@ -141,13 +141,12 @@ export default function DashboardPage() {
             defaultValue="overview"
             value={activeTab}
             onValueChange={setActiveTab}
-            className="w-full"
           >
-            <TabsList className="grid w-full grid-cols-4 lg:w-auto">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsList className="mb-4">
+              <TabsTrigger value="overview">Aperçu</TabsTrigger>
               <TabsTrigger value="yogurts">Yogurts</TabsTrigger>
-              <TabsTrigger value="orders">Orders</TabsTrigger>
-              <TabsTrigger value="users">Users</TabsTrigger>
+              <TabsTrigger value="orders">Commandes</TabsTrigger>
+              <TabsTrigger value="users">Utilisateurs</TabsTrigger>
             </TabsList>
             
             <AnimatePresence mode="wait">
@@ -161,16 +160,16 @@ export default function DashboardPage() {
                 <TabsContent value="overview" className="mt-6">
                   <Card>
                     <CardHeader>
-                      <CardTitle>Shop Overview</CardTitle>
+                      <CardTitle>Aperçu de la Boutique</CardTitle>
                       <CardDescription>
-                        Get a quick overview of your yogurt shop's performance.
+                        Obtenez un aperçu rapide des performances de votre boutique de yogurts.
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         <Card>
                           <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium">Top Selling Products</CardTitle>
+                            <CardTitle className="text-sm font-medium">Produits les Plus Vendus</CardTitle>
                           </CardHeader>
                           <CardContent>
                             <ul className="space-y-2">
@@ -178,11 +177,11 @@ export default function DashboardPage() {
                                 topYogurts.map((yogurt) => (
                                   <li key={yogurt.id} className="flex items-center justify-between">
                                     <span>{yogurt.name}</span>
-                                    <span className="text-sm text-muted-foreground">{yogurt.sold} sold</span>
+                                    <span className="text-sm text-muted-foreground">{yogurt.sold} vendus</span>
                                   </li>
                                 ))
                               ) : (
-                                <li className="text-sm text-muted-foreground">No sales data available</li>
+                                <li className="text-sm text-muted-foreground">Aucune donnée de vente disponible</li>
                               )}
                             </ul>
                           </CardContent>
@@ -190,22 +189,23 @@ export default function DashboardPage() {
                         
                         <Card>
                           <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium">Recent Orders</CardTitle>
+                            <CardTitle className="text-sm font-medium">Commandes Récentes</CardTitle>
                           </CardHeader>
                           <CardContent>
                             <ul className="space-y-2">
                               {recentOrders.length > 0 ? (
                                 recentOrders.map((order) => (
                                   <li key={order.id} className="flex items-center justify-between">
-                                    <span>Order #{order.id.substring(0, 4)}</span>
+                                    <span>Commande #{order.id.substring(0, 4)}</span>
                                     <span className={`text-sm ${order.status === 'completed' ? 'text-green-500' : 
                                                       order.status === 'cancelled' ? 'text-red-500' : 'text-amber-500'}`}>
-                                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                                      {order.status === 'completed' ? 'Terminée' : 
+                                       order.status === 'cancelled' ? 'Annulée' : 'En attente'}
                                     </span>
                                   </li>
                                 ))
                               ) : (
-                                <li className="text-sm text-muted-foreground">No recent orders</li>
+                                <li className="text-sm text-muted-foreground">Aucune commande récente</li>
                               )}
                             </ul>
                           </CardContent>
@@ -213,7 +213,7 @@ export default function DashboardPage() {
                         
                         <Card>
                           <CardHeader className="pb-2">
-                            <CardTitle className="text-sm font-medium">Low Stock Alert</CardTitle>
+                            <CardTitle className="text-sm font-medium">Alerte Stock Bas</CardTitle>
                           </CardHeader>
                           <CardContent>
                             <ul className="space-y-2">
@@ -222,12 +222,12 @@ export default function DashboardPage() {
                                   <li key={yogurt.id} className="flex items-center justify-between">
                                     <span>{yogurt.name}</span>
                                     <span className={`text-sm ${yogurt.stock < 10 ? 'text-red-500' : 'text-amber-500'}`}>
-                                      {yogurt.stock} left
+                                      {yogurt.stock} restants
                                     </span>
                                   </li>
                                 ))
                               ) : (
-                                <li className="text-sm text-muted-foreground">No low stock items</li>
+                                <li className="text-sm text-muted-foreground">Aucun produit en stock bas</li>
                               )}
                             </ul>
                           </CardContent>
@@ -235,11 +235,11 @@ export default function DashboardPage() {
                       </div>
                       
                       <div className="mt-6">
-                        <h3 className="mb-4 text-lg font-medium">Quick Actions</h3>
+                        <h3 className="mb-4 text-lg font-medium">Actions Rapides</h3>
                         <div className="flex flex-wrap gap-3">
-                          <Button onClick={() => setActiveTab("yogurts")}>Add New Yogurt</Button>
-                          <Button variant="outline" onClick={() => setActiveTab("orders")}>View All Orders</Button>
-                          <Button variant="outline" onClick={() => setActiveTab("users")}>Manage Users</Button>
+                          <Button onClick={() => setActiveTab("yogurts")}>Ajouter un Yogurt</Button>
+                          <Button variant="outline" onClick={() => setActiveTab("orders")}>Voir Toutes les Commandes</Button>
+                          <Button variant="outline" onClick={() => setActiveTab("users")}>Gérer les Utilisateurs</Button>
                         </div>
                       </div>
                     </CardContent>

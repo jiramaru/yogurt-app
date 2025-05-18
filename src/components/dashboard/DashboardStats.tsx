@@ -12,32 +12,32 @@ interface DashboardStatsProps {
 export default function DashboardStats({ stats }: DashboardStatsProps) {
   const statItems = [
     {
-      title: "Total Products",
+      title: "Total Produits",
       value: stats.totalYogurts,
       icon: Package,
       color: "bg-blue-500/10 text-blue-500",
-      increase: "+12% from last month",
+      increase: "+12% par rapport au mois dernier",
     },
     {
-      title: "Total Orders",
+      title: "Total Commandes",
       value: stats.totalOrders,
       icon: ShoppingCart,
       color: "bg-green-500/10 text-green-500",
-      increase: "+18% from last month",
+      increase: "+18% par rapport au mois dernier",
     },
     {
-      title: "Total Users",
+      title: "Total Utilisateurs",
       value: stats.totalUsers,
       icon: Users,
       color: "bg-purple-500/10 text-purple-500",
-      increase: "+7% from last month",
+      increase: "+7% par rapport au mois dernier",
     },
     {
-      title: "Total Revenue",
-      value: `$${stats.totalRevenue.toFixed(2)}`,
+      title: "Revenu Total",
+      value: `${stats.totalRevenue.toFixed(0)} FCFA`,
       icon: DollarSign,
       color: "bg-amber-500/10 text-amber-500",
-      increase: "+15% from last month",
+      increase: "+15% par rapport au mois dernier",
     },
   ];
 

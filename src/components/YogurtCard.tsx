@@ -48,7 +48,7 @@ export default function YogurtCard({ yogurt }: YogurtCardProps) {
           </div>
           <p className="text-muted-foreground text-sm line-clamp-2">{yogurt.description}</p>
           <div className="flex justify-between items-center">
-            <p className="font-semibold">${yogurt.price.toFixed(2)}</p>
+            <p className="font-semibold">{yogurt.price.toFixed(0)} FCFA</p>
             <p className={`text-xs ${yogurt.stock > 10 ? 'text-green-600 dark:text-green-400' : yogurt.stock > 0 ? 'text-amber-600 dark:text-amber-400' : 'text-red-600 dark:text-red-400'}`}>
               {yogurt.stock > 0 ? `En stock (${yogurt.stock})` : 'Épuisé'}
             </p>

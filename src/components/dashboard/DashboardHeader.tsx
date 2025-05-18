@@ -51,12 +51,12 @@ export default function DashboardHeader() {
             <Button variant="ghost" size="sm" asChild>
               <Link href="/">
                 <Home className="mr-2 h-4 w-4" />
-                Shop
+                Boutique
               </Link>
             </Button>
             <Button variant="ghost" size="sm" asChild>
               <Link href="/dashboard">
-                Dashboard
+                Tableau de bord
               </Link>
             </Button>
           </div>
@@ -67,7 +67,7 @@ export default function DashboardHeader() {
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search..."
+              placeholder="Rechercher..."
               className="w-full bg-background pl-8 md:w-[300px] lg:w-[400px]"
             />
           </div>
@@ -89,29 +89,29 @@ export default function DashboardHeader() {
               <div className="max-h-[300px] overflow-auto">
                 <DropdownMenuItem className="cursor-pointer">
                   <div className="flex flex-col gap-1">
-                    <p className="font-medium">New order received</p>
-                    <p className="text-xs text-muted-foreground">Order #1089 has been placed</p>
-                    <p className="text-xs text-muted-foreground">2 minutes ago</p>
+                    <p className="font-medium">Nouvelle commande reçue</p>
+                    <p className="text-xs text-muted-foreground">Commande #1089 a été passée</p>
+                    <p className="text-xs text-muted-foreground">Il y a 2 minutes</p>
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer">
                   <div className="flex flex-col gap-1">
-                    <p className="font-medium">Low stock alert</p>
-                    <p className="text-xs text-muted-foreground">Blueberry Delight is running low (5 left)</p>
-                    <p className="text-xs text-muted-foreground">1 hour ago</p>
+                    <p className="font-medium">Alerte stock bas</p>
+                    <p className="text-xs text-muted-foreground">Délice aux Myrtilles est presque épuisé (5 restants)</p>
+                    <p className="text-xs text-muted-foreground">Il y a 1 heure</p>
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="cursor-pointer">
                   <div className="flex flex-col gap-1">
-                    <p className="font-medium">New user registered</p>
-                    <p className="text-xs text-muted-foreground">user@example.com has created an account</p>
-                    <p className="text-xs text-muted-foreground">3 hours ago</p>
+                    <p className="font-medium">Nouvel utilisateur inscrit</p>
+                    <p className="text-xs text-muted-foreground">user@example.com a créé un compte</p>
+                    <p className="text-xs text-muted-foreground">Il y a 3 heures</p>
                   </div>
                 </DropdownMenuItem>
               </div>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer justify-center">
-                View all notifications
+                Voir toutes les notifications
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -134,15 +134,15 @@ export default function DashboardHeader() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>Mon Compte</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
+                <span>Paramètres</span>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <LogOut className="mr-2 h-4 w-4" />
-                <span>Logout</span>
+                <span>Déconnexion</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -162,7 +162,7 @@ export default function DashboardHeader() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="search"
-                  placeholder="Search..."
+                  placeholder="Rechercher..."
                   className="w-full pl-8"
                 />
               </div>
@@ -171,12 +171,12 @@ export default function DashboardHeader() {
                 <Button variant="outline" size="sm" asChild className="justify-start">
                   <Link href="/">
                     <Home className="mr-2 h-4 w-4" />
-                    Shop
+                    Boutique
                   </Link>
                 </Button>
                 <Button variant="outline" size="sm" asChild className="justify-start">
                   <Link href="/dashboard">
-                    Dashboard
+                    Tableau de bord
                   </Link>
                 </Button>
                 <Button variant="outline" size="sm" className="justify-start">
@@ -190,11 +190,11 @@ export default function DashboardHeader() {
                 </Button>
                 <Button variant="outline" size="sm" className="justify-start">
                   <Settings className="mr-2 h-4 w-4" />
-                  Settings
+                  Paramètres
                 </Button>
                 <Button variant="outline" size="sm" className="justify-start">
                   <LogOut className="mr-2 h-4 w-4" />
-                  Logout
+                  Déconnexion
                 </Button>
               </div>
             </div>
