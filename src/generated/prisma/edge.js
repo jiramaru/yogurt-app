@@ -173,6 +173,14 @@ const config = {
         "fromEnvVar": null,
         "value": "rhel-openssl-3.0.x",
         "native": true
+      },
+      {
+        "fromEnvVar": null,
+        "value": "rhel-openssl-3.0.x"
+      },
+      {
+        "fromEnvVar": null,
+        "value": "debian-openssl-3.0.x"
       }
     ],
     "previewFeatures": [],
@@ -199,8 +207,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../src/generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Yogurt {\n  id          String      @id @default(uuid())\n  name        String      @unique\n  price       Float\n  description String\n  imageUrl    String\n  stock       Int\n  createdAt   DateTime    @default(now())\n  updatedAt   DateTime    @updatedAt\n  orders      OrderItem[] // Relation to OrderItem\n}\n\nmodel Order {\n  id        String      @id @default(uuid())\n  userId    String? // Optional, for guest or logged-in users\n  total     Float\n  status    String      @default(\"pending\") // e.g., pending, completed, cancelled\n  createdAt DateTime    @default(now())\n  updatedAt DateTime    @updatedAt\n  items     OrderItem[] // Relation to OrderItem\n}\n\nmodel OrderItem {\n  id       String @id @default(uuid())\n  orderId  String\n  yogurtId String\n  quantity Int\n  price    Float // Price at time of order\n  order    Order  @relation(fields: [orderId], references: [id])\n  yogurt   Yogurt @relation(fields: [yogurtId], references: [id])\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  email     String   @unique\n  phone     String   @unique\n  role      String   @default(\"admin\") // e.g., admin, customer\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n",
-  "inlineSchemaHash": "7971676b857f3cc7a6029fa4a87e8af11cde12ffdfaf05cd0730cc2d34eef6b9",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider      = \"prisma-client-js\"\n  output        = \"../src/generated/prisma\"\n  binaryTargets = [\"native\", \"rhel-openssl-3.0.x\", \"debian-openssl-3.0.x\"]\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Yogurt {\n  id          String      @id @default(uuid())\n  name        String      @unique\n  price       Float\n  description String\n  imageUrl    String\n  stock       Int\n  createdAt   DateTime    @default(now())\n  updatedAt   DateTime    @updatedAt\n  orders      OrderItem[] // Relation to OrderItem\n}\n\nmodel Order {\n  id        String      @id @default(uuid())\n  userId    String? // Optional, for guest or logged-in users\n  total     Float\n  status    String      @default(\"pending\") // e.g., pending, completed, cancelled\n  createdAt DateTime    @default(now())\n  updatedAt DateTime    @updatedAt\n  items     OrderItem[] // Relation to OrderItem\n}\n\nmodel OrderItem {\n  id       String @id @default(uuid())\n  orderId  String\n  yogurtId String\n  quantity Int\n  price    Float // Price at time of order\n  order    Order  @relation(fields: [orderId], references: [id])\n  yogurt   Yogurt @relation(fields: [yogurtId], references: [id])\n}\n\nmodel User {\n  id        String   @id @default(uuid())\n  email     String   @unique\n  phone     String   @unique\n  role      String   @default(\"admin\") // e.g., admin, customer\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n",
+  "inlineSchemaHash": "e02de020631bab3259c07a6aa47d74425a72e0157796d39bb6804568c745f018",
   "copyEngine": true
 }
 config.dirname = '/'
