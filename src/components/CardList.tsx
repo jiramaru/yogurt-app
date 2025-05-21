@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { Yogurt } from "@/types";
 import YogurtCard from "./YogurtCard";
-import { getYogurts } from "@/actions/yogurt-actions";
 
 export default function CardList() {
   const [yogurts, setYogurts] = useState<Yogurt[]>([]);
@@ -12,10 +11,19 @@ export default function CardList() {
   useEffect(() => {
     const fetchYogurts = async () => {
       try {
-        const response = await getYogurts();
-        if (response.success && response.data) {
-          setYogurts(response.data);
+        const response = await fetch('/api/yogurts', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch yogurts');
         }
+
+        const data = await response.json();
+        setYogurts(data);
       } catch (error) {
         console.error("Error fetching yogurts:", error);
       } finally {
