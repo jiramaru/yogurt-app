@@ -33,7 +33,7 @@ export default function DashboardPage() {
     totalOrders: 0,
     totalUsers: 0,
     totalRevenue: 0,
-  });
+  }); 
 
   // State for overview data
   const [topYogurts, setTopYogurts] = useState<TopSellingYogurt[]>([]);
