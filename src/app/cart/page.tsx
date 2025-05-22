@@ -108,10 +108,10 @@ export default function CartPage() {
             <div className="mb-4 sm:mb-0">
               <h3 className="font-medium text-lg">{item.name}</h3>
               <div className="flex items-center gap-2 mt-1">
-                <p className="font-semibold">{item.price.toFixed(0)} FCFA</p>
+                <p className="font-semibold">{item.price.toFixed(0)} XAF</p>
                 <p className="text-muted-foreground text-sm">× {item.quantity}</p>
                 <p className="font-bold text-primary">
-                  = {(item.price * item.quantity).toFixed(0)} FCFA
+                  = {(item.price * item.quantity).toFixed(0)} XAF
                 </p>
               </div>
             </div>
@@ -167,15 +167,15 @@ export default function CartPage() {
         <div className="space-y-2 mb-4">
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">Sous-total ({totalItems} {totalItems === 1 ? 'article' : 'articles'})</span>
-            <span>{totalPrice.toFixed(0)} FCFA</span>
+            <span>{totalPrice.toFixed(0)} XAF</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-muted-foreground">Livraison</span>
             <span>Gratuite</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-muted-foreground">TVA</span>
-            <span>{(totalPrice * 0.1).toFixed(0)} FCFA</span>
+            <span className="text-muted-foreground">Frais</span>
+            <span>{(totalPrice * 0.035).toFixed(0)} XAF</span>
           </div>
         </div>
         
@@ -183,7 +183,7 @@ export default function CartPage() {
           <div className="flex justify-between items-center">
             <span className="text-lg font-medium">Total:</span>
             <span className="text-lg font-bold">
-              {(totalPrice + (totalPrice * 0.1)).toFixed(0)} FCFA
+              {(totalPrice + (totalPrice * 0.035)).toFixed(0)} XAF
             </span>
           </div>
         </div>

@@ -7,20 +7,20 @@ import { Star } from "lucide-react";
 export default function TestimonialsSection() {
   const testimonials = [
     {
-      name: "Sophie Dubois",
-      image: "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      name: "Sophie A.",
+      image: "https://images.pexels.com/photos/29060910/pexels-photo-29060910/free-photo-of-la-mode-africaine.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       rating: 5,
       text: "Les yogurts d'Isy sont tout simplement divins ! La texture crémeuse et les saveurs naturelles me rappellent les yogurts que ma grand-mère préparait. Un vrai délice !"
     },
     {
-      name: "Thomas Laurent",
-      image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      name: "Christophe M.",
+      image: "https://images.pexels.com/photos/32167118/pexels-photo-32167118/free-photo-of-portrait-en-noir-et-blanc-d-un-jeune-homme.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       rating: 5,
       text: "Je suis intolérant au lactose et j'ai enfin trouvé des alternatives délicieuses avec les yogurts végétaux d'Isy. Merci de penser à tous les gourmands !"
     },
     {
-      name: "Marie Lefèvre",
-      image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      name: "Deborah K.",
+      image: "https://images.pexels.com/photos/32178964/pexels-photo-32178964/free-photo-of-aminatu.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
       rating: 5,
       text: "Mes enfants adorent les yogurts aux fruits d'Isy. C'est rassurant de leur donner un goûter sain et délicieux préparé avec des ingrédients de qualité."
     }

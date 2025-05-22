@@ -269,9 +269,9 @@ export default function YogurtManagement() {
         <CardHeader>
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <CardTitle>Yogurt Management</CardTitle>
+              <CardTitle>Gestion des yaourts</CardTitle>
               <CardDescription>
-                Add, edit, or remove yogurt products from your shop.
+                Ajoutez, modifiez ou supprimez des produits de yaourt de votre boutique.
               </CardDescription>
             </div>
             <Button onClick={() => {
@@ -279,7 +279,7 @@ export default function YogurtManagement() {
               setIsAddModalOpen(true);
             }}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Yogurt
+              Ajouter un yaourt
             </Button>
           </div>
         </CardHeader>
@@ -318,7 +318,7 @@ export default function YogurtManagement() {
               }}
             >
               <RefreshCw className="mr-2 h-4 w-4" />
-              Refresh
+              Rafraichir
             </Button>
           </div>
 
@@ -326,7 +326,7 @@ export default function YogurtManagement() {
             <div className="flex h-[300px] items-center justify-center">
               <div className="flex flex-col items-center gap-2">
                 <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-                <p className="text-sm text-muted-foreground">Loading yogurts...</p>
+                <p className="text-sm text-muted-foreground">Chargement des yaourts...</p>
               </div>
             </div>
           ) : sortedYogurts.length === 0 ? (
@@ -334,11 +334,11 @@ export default function YogurtManagement() {
               <div className="rounded-full bg-muted p-3">
                 <ShoppingCart className="h-6 w-6 text-muted-foreground" />
               </div>
-              <h3 className="text-lg font-medium">No yogurts found</h3>
+              <h3 className="text-lg font-medium">Aucun yaourt trouvé</h3>
               <p className="text-sm text-muted-foreground">
                 {searchQuery
-                  ? "Try a different search term"
-                  : "Add your first yogurt to get started"}
+                  ? "Essayez un terme de recherche différent"
+                  : "Ajoutez votre premier yaourt pour commencer"}
               </p>
             </div>
           ) : (
@@ -349,13 +349,13 @@ export default function YogurtManagement() {
                     <TableHead className="w-[80px]">Image</TableHead>
                     <TableHead className="cursor-pointer" onClick={() => toggleSort("name")}>
                       <div className="flex items-center gap-1">
-                        Name
+                        Nom
                         <ArrowUpDown className="h-4 w-4" />
                       </div>
                     </TableHead>
                     <TableHead className="cursor-pointer" onClick={() => toggleSort("price")}>
                       <div className="flex items-center gap-1">
-                        Price
+                        Prix
                         <ArrowUpDown className="h-4 w-4" />
                       </div>
                     </TableHead>
@@ -399,7 +399,7 @@ export default function YogurtManagement() {
                           </div>
                         </TableCell>
                         <TableCell className="font-medium">{yogurt.name}</TableCell>
-                        <TableCell>${yogurt.price.toFixed(2)}</TableCell>
+                        <TableCell>{yogurt.price.toFixed(0)} XAF</TableCell>
                         <TableCell>
                           <span
                             className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
@@ -421,7 +421,7 @@ export default function YogurtManagement() {
                               onClick={() => openEditModal(yogurt)}
                             >
                               <Edit className="h-4 w-4" />
-                              <span className="sr-only">Edit</span>
+                              <span className="sr-only">Modifier</span>
                             </Button>
                             <Button
                               variant="ghost"
@@ -429,7 +429,7 @@ export default function YogurtManagement() {
                               onClick={() => handleDeleteYogurt(yogurt.id)}
                             >
                               <Trash2 className="h-4 w-4" />
-                              <span className="sr-only">Delete</span>
+                              <span className="sr-only">Supprimer</span>
                             </Button>
                           </div>
                         </TableCell>
@@ -443,7 +443,7 @@ export default function YogurtManagement() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <p className="text-sm text-muted-foreground">
-            Showing {sortedYogurts.length} of {yogurts.length} yogurts
+            Affichage {sortedYogurts.length} de {yogurts.length} yaourts
           </p>
         </CardFooter>
       </Card>
@@ -460,14 +460,14 @@ export default function YogurtManagement() {
               exit="exit"
             >
               <div className="flex items-center justify-between border-b p-4">
-                <h2 className="text-lg font-semibold">Add New Yogurt</h2>
+                <h2 className="text-lg font-semibold">Ajouter un nouveau yaourt</h2>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => setIsAddModalOpen(false)}
                 >
                   <X className="h-4 w-4" />
-                  <span className="sr-only">Close</span>
+                  <span className="sr-only">Fermer</span>
                 </Button>
               </div>
               <Form {...form}>
@@ -477,7 +477,7 @@ export default function YogurtManagement() {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Name</FormLabel>
+                        <FormLabel>Nom</FormLabel>
                         <FormControl>
                           <Input placeholder="Strawberry Bliss" {...field} />
                         </FormControl>
@@ -490,7 +490,7 @@ export default function YogurtManagement() {
                     name="price"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Price ($)</FormLabel>
+                        <FormLabel>Prix (XAF)</FormLabel>
                         <FormControl>
                           <Input type="number" step="0.01" min="0" {...field} />
                         </FormControl>
@@ -519,7 +519,7 @@ export default function YogurtManagement() {
                     name="imageUrl"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Image URL</FormLabel>
+                        <FormLabel>URL de l'image</FormLabel>
                         <FormControl>
                           <Input
                             placeholder="https://example.com/image.jpg"
@@ -527,7 +527,7 @@ export default function YogurtManagement() {
                           />
                         </FormControl>
                         <FormDescription>
-                          Enter a valid URL for the yogurt image
+                          Entrez une URL valide pour l'image du yaourt
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -552,11 +552,11 @@ export default function YogurtManagement() {
                       variant="outline"
                       onClick={() => setIsAddModalOpen(false)}
                     >
-                      Cancel
+                      Annuler
                     </Button>
                     <Button type="submit">
                       <Plus className="mr-2 h-4 w-4" />
-                      Add Yogurt
+                      Ajouter un yaourt
                     </Button>
                   </div>
                 </form>
@@ -578,7 +578,7 @@ export default function YogurtManagement() {
               exit="exit"
             >
               <div className="flex items-center justify-between border-b p-4">
-                <h2 className="text-lg font-semibold">Edit Yogurt</h2>
+                <h2 className="text-lg font-semibold">Modifier le yaourt</h2>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -598,7 +598,7 @@ export default function YogurtManagement() {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Name</FormLabel>
+                        <FormLabel>Nom</FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
@@ -611,7 +611,7 @@ export default function YogurtManagement() {
                     name="price"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Price ($)</FormLabel>
+                        <FormLabel>Prix (XAF)</FormLabel>
                         <FormControl>
                           <Input type="number" step="0.01" min="0" {...field} />
                         </FormControl>
@@ -637,12 +637,12 @@ export default function YogurtManagement() {
                     name="imageUrl"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Image URL</FormLabel>
+                        <FormLabel>URL de l'image</FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
                         <FormDescription>
-                          Enter a valid URL for the yogurt image
+                          Entrez une URL valide pour l'image du yaourt
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -670,11 +670,11 @@ export default function YogurtManagement() {
                         setEditingYogurt(null);
                       }}
                     >
-                      Cancel
+                      Annuler
                     </Button>
                     <Button type="submit">
                       <Check className="mr-2 h-4 w-4" />
-                      Save Changes
+                      Enregister les modifications
                     </Button>
                   </div>
                 </form>
