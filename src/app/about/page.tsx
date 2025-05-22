@@ -101,7 +101,7 @@ export default function AboutPage() {
                     <div className="relative w-32 h-32 rounded-full overflow-hidden mb-4">
                       <Image
                         src="https://images.pexels.com/photos/32108574/pexels-photo-32108574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                        alt="Sophie Laurent"
+                        alt="Sophie Malanda"
                         fill
                         className="object-cover"
                       />

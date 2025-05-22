@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,6 +23,7 @@ import {
   type RecentOrder, 
   type LowStockYogurt 
 } from "@/actions";
+import OTPModal from "@/components/OTPModal";
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -37,6 +39,11 @@ export default function DashboardPage() {
   const [topYogurts, setTopYogurts] = useState<TopSellingYogurt[]>([]);
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
   const [lowStockYogurts, setLowStockYogurts] = useState<LowStockYogurt[]>([]);
+
+  // OTP verification states
+  const [showOTP, setShowOTP] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const router = useRouter();
 
   // Fetch dashboard stats and overview data
   useEffect(() => {
@@ -80,6 +87,58 @@ export default function DashboardPage() {
     fetchDashboardData();
   }, []);
 
+  useEffect(() => {
+    // Check if already verified
+    const verified = sessionStorage.getItem("dashboard-verified");
+    if (verified === "true") {
+      setIsVerified(true);
+    } else {
+      handleSendOTP();
+    }
+  }, []);
+
+  const handleSendOTP = async () => {
+    try {
+      const response = await fetch("/api/otp", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send OTP");
+      }
+
+      setShowOTP(true);
+      toast.success("Verification code sent to ode808prod@gmail.com");
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      toast.error("Failed to send verification code");
+      router.push("/");
+    }
+  };
+
+  const handleVerifyOTP = async (otp: string) => {
+    try {
+      const response = await fetch("/api/otp", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ otp }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Invalid verification code");
+      }
+
+      setIsVerified(true);
+      setShowOTP(false);
+      sessionStorage.setItem("dashboard-verified", "true");
+      toast.success("Successfully verified!");
+    } catch (error) {
+      toast.error("Invalid verification code");
+    }
+  };
+
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -112,6 +171,16 @@ export default function DashboardPage() {
           <p className="text-lg font-medium">Chargement du tableau de bord...</p>
         </div>
       </div>
+    );
+  }
+
+  if (!isVerified) {
+    return (
+      <OTPModal
+        isOpen={showOTP}
+        onVerify={handleVerifyOTP}
+        onClose={() => router.push("/")}
+      />
     );
   }
 
