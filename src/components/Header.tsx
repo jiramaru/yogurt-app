@@ -31,8 +31,8 @@ export default function Header() {
         <Link href="/cart">
           <span className="flex items-center gap-2">
             <ShoppingCart className="h-4 w-4" />
-            <span>Cart</span>
-            {totalPrice > 0 && <span className="text-xs text-muted-foreground">(${totalPrice.toFixed(2)})</span>}
+            <span>Mon panier</span>
+            {totalPrice > 0 && <span className="text-xs text-muted-foreground">({totalPrice.toFixed(0)} XAF)</span>}
           </span>
         </Link>
       </Button>

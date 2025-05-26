@@ -27,12 +27,23 @@ export default function ContactPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
       toast.success("Message envoyé avec succès! Nous vous répondrons bientôt.");
       setFormData({
         name: "",
@@ -40,8 +51,12 @@ export default function ContactPage() {
         subject: "",
         message: ""
       });
+    } catch (error) {
+      toast.error("Erreur lors de l'envoi du message. Veuillez réessayer.");
+      console.error('Error:', error);
+    } finally {
       setIsSubmitting(false);
-    }, 1500);
+    }
   };
 
   return (
@@ -140,7 +155,7 @@ export default function ContactPage() {
                         <h3 className="font-medium">Adresse</h3>
                         <p className="text-muted-foreground">
                           123 Rue des Délices<br />
-                          75001 Paris, France
+                          Moungali, Brazzaville
                         </p>
                       </div>
                     </div>
@@ -149,7 +164,7 @@ export default function ContactPage() {
                       <Phone className="h-5 w-5 text-primary mr-3 mt-1" />
                       <div>
                         <h3 className="font-medium">Téléphone</h3>
-                        <p className="text-muted-foreground">+33 1 23 45 67 89</p>
+                        <p className="text-muted-foreground">+24206728XXXX</p>
                       </div>
                     </div>
                     
@@ -157,7 +172,7 @@ export default function ContactPage() {
                       <Mail className="h-5 w-5 text-primary mr-3 mt-1" />
                       <div>
                         <h3 className="font-medium">Email</h3>
-                        <p className="text-muted-foreground">contact@isyyogurt.com</p>
+                        <p className="text-muted-foreground">ikojackly@gmail.com</p>
                       </div>
                     </div>
                     

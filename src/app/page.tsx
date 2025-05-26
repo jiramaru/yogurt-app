@@ -26,11 +26,12 @@ export default function Home() {
           <CardList />
         </div>
         
-        <div className="text-center">
+        {/* <div className="text-center">
           <Button asChild size="lg" className="mx-auto">
             <Link href="/contact">Commander maintenant</Link>
           </Button>
-        </div>
+        </div> */}
+
       </div>
       
       <FeaturesSection />

@@ -64,7 +64,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center">
                 <Mail className="h-4 w-4 mr-2 text-primary" />
-                <span className="text-muted-foreground">contact@isy.com</span>
+                <span className="text-muted-foreground">ikojackly@gmail.com</span>
               </li>
             </ul>
           </div>
